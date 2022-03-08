@@ -3,11 +3,13 @@ package io.getarrays.server.service.implementation;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Collection;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.getarrays.server.enumeration.Status;
 import io.getarrays.server.model.Server;
@@ -67,9 +69,12 @@ private final ServerRepo serverRepo;
 
 
 	private String setServerImageURL() {
-String [] imageNames;		
+String [] imageNames= {"server1.png", "server2.jpeg",
+		"server3.jpeg", "server4.png"};		
 
-return null;
+return ServletUriComponentsBuilder.fromCurrentContextPath()
+		.path("server/image/"+
+		imageNames[new Random().nextInt(4)]).toUriString();
 	}
 
 }
