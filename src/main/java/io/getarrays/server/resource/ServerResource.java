@@ -1,15 +1,20 @@
 package io.getarrays.server.resource;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/server")
 @RequiredArgsConstructor
+
 public class ServerResource {
 	
 	
@@ -62,7 +68,7 @@ public class ServerResource {
 				);
 		
 	}
-	@PutMapping("/save")
+	@PostMapping("/save")
 
 	public ResponseEntity<Response> pingServer(@RequestBody @Valid Server server) {
 		
@@ -93,4 +99,27 @@ public class ServerResource {
 				);
 		
 	}
+	@DeleteMapping("/delete/{id}")
+
+	public ResponseEntity<Response> deleteServer(@PathVariable("id") Long id) {
+		
+		return ResponseEntity.ok(
+				Response.builder()
+				.timeStamp(LocalDateTime.now())
+				.data(Map.of("deleted", serverService.delete(id)))
+				.message("Server deleted")
+				.status(HttpStatus.OK)
+				.statusCode(HttpStatus.OK.value())
+				.build()
+				);
+		
+	}
+	@GetMapping(path = "/image/{fileName}", produces =MediaType.IMAGE_PNG_VALUE)
+
+	public byte[] getServer(@PathVariable("fileName") String fileName) throws IOException {
+		 
+		return Files.readAllBytes(Paths.get(System.getProperty("user.home")+"/Downloads/images2/"+fileName));
+		
+	}
 }
+

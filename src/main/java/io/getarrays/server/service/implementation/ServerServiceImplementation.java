@@ -2,6 +2,8 @@ package io.getarrays.server.service.implementation;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.Collection;
 import java.util.Random;
 
@@ -75,6 +77,19 @@ String [] imageNames= {"server1.png", "server2.jpeg",
 return ServletUriComponentsBuilder.fromCurrentContextPath()
 		.path("server/image/"+
 		imageNames[new Random().nextInt(4)]).toUriString();
+	}
+	private boolean isReachable(String ipAddress, int port, int timeout) {
+	try (Socket socket = new Socket()){
+		
+		socket.connect(new InetSocketAddress(ipAddress, port), timeout);
+		return true;
+	}
+	catch (IOException exception) {
+		return false;
+	}
+
+
+		
 	}
 
 }
